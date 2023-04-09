@@ -1,6 +1,6 @@
 import { useState } from "react";
 import User from "../lib/model";
-
+// import { connectToDatabase } from "./api/db";
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -9,7 +9,10 @@ const RegisterForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Your registration form submission logic goes here
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
   };
 
   return (

@@ -1,22 +1,12 @@
 // import { MongoClient } from "mongodb";
 
-// const uri =
-//   "mongodb+srv://FoodMatch:<A2CVqILiH4aD7tQm>@cluster0.oq05m6a.mongodb.net/tests";
-
-// const client = new MongoClient(uri, {
+// const client = new MongoClient(process.env.MONGODB_URI, {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // });
 
-// async function connect() {
-//   try {
-//     await client.connect();
-//     console.log("Connected to MongoDB");
-//     return client.db("<database>");
-//   } catch (err) {
-//     console.log(err);
-//     process.exit(1);
-//   }
+// export async function connectToDatabase() {
+//   if (!client.isConnected()) await client.connect();
+//   const db = client.db("foodmatch");
+//   return { client, db };
 // }
-
-// export { connect };

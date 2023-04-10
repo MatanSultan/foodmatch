@@ -22,7 +22,34 @@ const recipes = [
     description:
       "A quick and easy Asian-inspired dish with tender beef and crisp vegetables.",
   },
+
+  {
+    title: "Pizza",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg",
+    description: "A ITALIAN DISH",
+  },
+  {
+    title: "Hamburger",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Hamburger_%28black_bg%29.jpg/375px-Hamburger_%28black_bg%29.jpg",
+    description: "hamburger with mashroom",
+  },
+  {
+    title: "Falafel",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Falafels_2.jpg/375px-Falafels_2.jpg",
+    description: "Falafel israeli and arabic food",
+  },
+  {
+    title: "Sushi",
+    image:
+      "https://www.justonecookbook.com/wp-content/uploads/2020/01/Sushi-Rolls-Maki-Sushi-%E2%80%93-Hosomaki-1106-II.jpg",
+    description:
+      "Sushi is a Japanese dish of prepared vinegared rice, usually with some sugar and salt",
+  },
 ];
+
 const Recipes = () => {
   return (
     <div>

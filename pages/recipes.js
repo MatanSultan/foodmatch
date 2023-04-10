@@ -49,7 +49,7 @@ const recipes = [
       "Sushi is a Japanese dish of prepared vinegared rice, usually with some sugar and salt",
   },
 ];
-
+// create a function that the user search for a recipe in the search bar
 const Recipes = () => {
   return (
     <div>

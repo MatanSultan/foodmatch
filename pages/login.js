@@ -1,14 +1,31 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Nav from "../components/Nav";
-
+import { UserContext } from "../context/UserContext";
+import axios from "axios";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { user, setUser } = useContext(UserContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      await axios.post("/api/login", {
+        email,
+        password,
+      });
+      // if data current user is not null, then redirect to recipes page
+
+      if (data.user) {
+        router.push("/about");
+      }
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
+    }
   };
 
   return (

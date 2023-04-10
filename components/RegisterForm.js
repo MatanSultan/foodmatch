@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { redirect } from "next/dist/server/api-utils";
 import { UserContext } from "../context/UserContext";
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -14,6 +13,29 @@ const RegisterForm = () => {
     event.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match");
+      if (username === "") {
+        alert("Please enter a username");
+      }
+      if (username.length < 3) {
+        alert("Username must be at least 3 characters");
+      }
+      if (email === "") {
+        alert("Please enter an email");
+      }
+      if (password === "") {
+        alert("Please enter a password");
+      }
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+      }
+      if (confirmPassword === "") {
+        alert("Please confirm your password");
+      }
+      // handel with sql injection
+      if (username.includes(" ")) {
+        alert("Username cannot contain spaces");
+      }
+
       return;
     }
     try {
@@ -24,7 +46,8 @@ const RegisterForm = () => {
       });
       setUser({ username, email });
 
-      // redirect.push("/recipes");
+      // transfer to login page
+      // router.push("/recipes");
     } catch (error) {
       alert("Something went wrong");
       console.log(error);

@@ -26,14 +26,14 @@ const Nav = () => {
               Home
             </li>
           </Link>
-          <Link href="/recipes">
+          <Link href="/about">
             <li className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-500 mr-4">
-              Recipes
+              about
             </li>
           </Link>
-          <Link href="/restaurants">
+          <Link href="/recipes">
             <li className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-500">
-              Restaurants
+              Recipes
             </li>
           </Link>
         </div>

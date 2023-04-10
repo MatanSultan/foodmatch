@@ -1,6 +1,5 @@
 import { useState } from "react";
-import User from "../lib/model";
-// import { connectToDatabase } from "./api/db";
+
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

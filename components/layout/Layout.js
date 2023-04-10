@@ -2,11 +2,12 @@ import React from "react";
 import Nav from "/components/Nav.js";
 import RegisterForm from "../RegisterForm";
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
     <>
-      <Nav />
-      <main>{children}</main>
+      <main>
+        <Nav />
+      </main>
     </>
   );
 };

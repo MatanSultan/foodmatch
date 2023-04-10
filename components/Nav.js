@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 const Nav = () => {
+  const { user, setUser } = useContext(UserContext);
   return (
     <nav className="flex items-center justify-between flex-wrap bg-gray-700 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -38,11 +41,29 @@ const Nav = () => {
           </Link>
         </div>
         <div>
-          <Link href="/login">
-            <li className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-gray-500 hover:bg-white mt-4 lg:mt-0">
-              Login
-            </li>
-          </Link>
+          {user ? (
+            <div className="flex items-center text-red-400">
+              hello{" "}
+              <p
+                className="text-red-400 inline-block align-baseline font-bold text-sm text-red-400 hover:text-red-800
+              "
+              >
+                {user.email}
+              </p>
+              <button
+                onClick={() => setUser(null)}
+                className=" bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                log out
+              </button>
+            </div>
+          ) : (
+            <Link href="/login">
+              <li className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-gray-500 hover:bg-white mt-4 lg:mt-0">
+                Login
+              </li>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

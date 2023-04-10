@@ -1,16 +1,33 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
+import { redirect } from "next/dist/server/api-utils";
+import { UserContext } from "../context/UserContext";
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { user, setUser } = useContext(UserContext);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
+    }
+    try {
+      await axios.put("/api/register", {
+        username,
+        email,
+        password,
+      });
+      setUser({ username, email });
+
+      // redirect.push("/recipes");
+    } catch (error) {
+      alert("Something went wrong");
+      console.log(error);
     }
   };
 

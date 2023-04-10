@@ -16,7 +16,9 @@ const SearchBar = ({ onSubmit }) => {
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.target.value)}
       />
-      <button type="submit">Search</button>
+      <button type="submit" className="btn">
+        Search
+      </button>
     </form>
   );
 };

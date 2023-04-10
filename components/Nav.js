@@ -38,9 +38,9 @@ const Nav = () => {
           </Link>
         </div>
         <div>
-          <Link href="/register">
+          <Link href="/login">
             <li className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-gray-500 hover:bg-white mt-4 lg:mt-0">
-              Sign Up
+              Login
             </li>
           </Link>
         </div>

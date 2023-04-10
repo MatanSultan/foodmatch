@@ -2,6 +2,7 @@ import React from "react";
 import RecipeCard from "../components/RecipeCard";
 import Nav from "../components/Nav";
 import SearchBar from "../components/SearchBar";
+import Link from "next/link";
 const recipes = [
   {
     title: "Spaghetti with Meat Sauce",
@@ -59,9 +60,11 @@ const Recipes = () => {
         <div className="mt-9 text-center algin-center">
           <SearchBar />
         </div>
+
         <h1 className="mt-6 text-3xl font-bold mb-6 text-center text-gray-900">
           Recipes
         </h1>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {recipes &&
             recipes.map((recipe, index) => (

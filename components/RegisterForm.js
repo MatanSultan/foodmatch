@@ -125,8 +125,6 @@ const RegisterForm = () => {
         >
           Register
         </button>
-        {/* button to log in  */}
-        <Link href="/login"></Link>
       </form>
     </div>
   );

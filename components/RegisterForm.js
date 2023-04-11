@@ -47,7 +47,6 @@ const RegisterForm = () => {
       setUser({ username, email });
 
       // transfer to login page
-      // router.push("/recipes");
     } catch (error) {
       alert("Something went wrong");
       console.log(error);

@@ -48,7 +48,7 @@ const RegisterForm = () => {
 
       // transfer to login page
     } catch (error) {
-      alert("Something went wrong");
+      // alert("Something went wrong");
       console.log(error);
     }
   };

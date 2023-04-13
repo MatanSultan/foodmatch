@@ -3,10 +3,13 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Nav from "../components/Nav";
+import { UserContext } from "../context/UserContext";
+import { useContext } from "react";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -15,13 +18,14 @@ const LoginForm = () => {
         email,
         password,
       });
+
       const user = response.data;
-      // Do something with the user object, e.g. store it in a global state
-      // if user exists, redirect to the add recipe page
-      if (user) {
-        router.push("/recipes");
-      }
+
+      alert("Login successful");
+      router.push("/recipes");
+      setUser(response.data.email);
     } catch (error) {
+      alert("Login failed");
       console.log(error);
     }
   };

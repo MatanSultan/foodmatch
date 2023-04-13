@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
 const Nav = () => {
   const { user, setUser } = useContext(UserContext);
+  async function logOut() {
+    setUser(null);
+    await axios.get("/api/logout");
+  }
   return (
     <nav className="flex items-center justify-between flex-wrap bg-gray-700 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -51,7 +56,7 @@ const Nav = () => {
                 {user.email}
               </p>
               <button
-                onClick={() => setUser(null)}
+                onClick={() => logOut()}
                 className=" bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 log out

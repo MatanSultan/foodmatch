@@ -22,7 +22,7 @@ export default function AddRecipe() {
 
     const {
       data: { imageUrl },
-    } = await axios.post("/api/upload", formData, {
+    } = await axios.post("/api/upload-recipe", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

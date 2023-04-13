@@ -1,6 +1,7 @@
 import React from "react";
 import SearchBar from "./SearchBar";
-
+import Link from "next/link";
+import { FaEye } from "react-icons/fa";
 const RecipeCard = ({ title, image, description }) => {
   return (
     <>
@@ -18,6 +19,13 @@ const RecipeCard = ({ title, image, description }) => {
               {title}
             </div>
             <p className="mt-2 text-gray-500">{description}</p>
+          </div>
+          <div className="flex items-center  bg-gray-900">
+            <Link href={`/recipes/}`}>
+              <span className="text-white font-bold">
+                <FaEye />
+              </span>
+            </Link>
           </div>
         </div>
       </div>

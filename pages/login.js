@@ -17,12 +17,15 @@ const LoginForm = () => {
       });
       const user = response.data;
       // Do something with the user object, e.g. store it in a global state
-      router.push("/");
+      // if user exists, redirect to the add recipe page
+      if (user) {
+        router.push("/recipes");
+      }
     } catch (error) {
-      console.error(error);
-      alert("Invalid email or password");
+      console.log(error);
     }
   };
+
   return (
     <div>
       <Nav />

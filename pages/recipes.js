@@ -9,7 +9,10 @@ function Recipes() {
   useEffect(() => {
     fetch("/api/recipes")
       .then((response) => response.json())
-      .then((data) => setRecipes(data))
+      .then((data) => {
+        console.log(data);
+        setRecipes(data);
+      })
       .catch((error) => console.error(error));
   }, []);
 

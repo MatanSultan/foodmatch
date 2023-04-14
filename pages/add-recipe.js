@@ -4,93 +4,88 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import Nav from "../components/Nav";
+
 export default function AddRecipe() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const { user } = useContext(UserContext);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // if the user is not logged in, redirect to login page
-    if (!user) {
-      router.push("/");
+  const [image_url, setImageUrl] = useState("");
+  const [user_id, setUserId] = useState("");
+  const [message, setMessage] = useState("");
+  const { user, setUser } = useContext(UserContext);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const results = await axios.post("/api/addrecipe", {
+        title,
+        description,
+        image_url,
+        user_id,
+      });
+      setUser(results.data);
+      setMessage(results.data.message);
+    } catch (e) {
+      setMessage(e.response.data.message);
     }
-    // Upload image to server
-    const formData = new FormData();
-    formData.append("file", image);
-
-    const {
-      data: { imageUrl },
-    } = await axios.post("/api/upload-recipe", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    // Create recipe in database
-    const { data: recipeData } = await axios.post("/api/upload-recipe", {
-      title,
-      description,
-      image_url: imageUrl,
-      user_id: user.id,
-    });
-
-    console.log(recipeData);
   };
-
   return (
-    <div>
+    <>
       <Nav />
-
-      <div className="max-w-md mx-auto mt-4">
-        <h1 className="text-2xl font-bold mb-4">Add Recipe</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="title" className="block font-medium text-gray-700">
-              Title:
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="description"
-              className="block font-medium text-gray-700"
-            >
-              Description:
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
-            />
-          </div>
-          <div>
-            <label htmlFor="image" className="block font-medium text-gray-700">
-              Image:
-            </label>
-            <input
-              type="file"
-              id="image"
-              onChange={(event) => setImage(event.target.files[0])}
-              className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
-            />
-          </div>
+      <div class="p-8">
+        <h1 class="text-3xl font-bold mb-4">Add Recipe</h1>
+        <form class="flex flex-col" onSubmit={handleSubmit}>
+          <label class="mb-2 font-bold" for="title">
+            Title
+          </label>
+          <input
+            class="px-4 py-2 border rounded-lg mb-4"
+            type="text"
+            id="title"
+            placeholder="Title"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+          <label class="mb-2 font-bold" for="description">
+            Description
+          </label>
+          <input
+            class="px-4 py-2 border rounded-lg mb-4"
+            type="text"
+            id="description"
+            placeholder="Description"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          />
+          <label class="mb-2 font-bold" for="image-url">
+            Image URL
+          </label>
+          <input
+            class="px-4 py-2 border rounded-lg mb-4"
+            type="text"
+            id="image-url"
+            placeholder="Image URL"
+            onChange={(e) => setImageUrl(e.target.value)}
+            value={image_url}
+          />
+          <label class="mb-2 font-bold" for="user-id">
+            User ID
+          </label>
+          <input
+            class="px-4 py-2 border rounded-lg mb-4"
+            type="text"
+            id="user-id"
+            placeholder="User ID"
+            onChange={(e) => setUserId(e.target.value)}
+            value={user_id}
+          />
           <button
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-700 transition duration-200"
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Submit
+            Add Recipe
           </button>
         </form>
+        <p class="mt-4">{message}</p>
       </div>
-    </div>
+    </>
   );
 }

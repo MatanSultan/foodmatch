@@ -45,6 +45,8 @@ const RegisterForm = () => {
         password,
       });
       setUser({ username, email });
+      alert("You have successfully registered");
+      window.location.href = "/recipes";
 
       // transfer to login page
     } catch (error) {

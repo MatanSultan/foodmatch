@@ -2,42 +2,50 @@ import { useContext, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      if (username === "") {
-        alert("Please enter a username");
-      }
-      if (username.length < 3) {
-        alert("Username must be at least 3 characters");
-      }
-      if (email === "") {
-        alert("Please enter an email");
-      }
-      if (password === "") {
-        alert("Please enter a password");
-      }
-      if (password.length < 6) {
-        alert("Password must be at least 6 characters");
-      }
-      if (confirmPassword === "") {
-        alert("Please confirm your password");
-      }
-      // handel with sql injection
-      if (username.includes(" ")) {
-        alert("Username cannot contain spaces");
-      }
 
+    if (username === "") {
+      alert("Please enter a username");
       return;
     }
+    if (username.includes(" ")) {
+      alert("Username cannot contain spaces");
+      return;
+    }
+    if (username.length < 3) {
+      alert("Username must be at least 3 characters");
+      return;
+    }
+    if (email === "") {
+      alert("Please enter an email");
+      return;
+    }
+    if (password === "") {
+      alert("Please enter a password");
+      return;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters");
+      return;
+    }
+    if (confirmPassword === "") {
+      alert("Please confirm your password");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
     try {
       await axios.put("/api/register", {
         username,
@@ -47,10 +55,8 @@ const RegisterForm = () => {
       setUser({ username, email });
       alert("You have successfully registered");
       window.location.href = "/recipes";
-
-      // transfer to login page
     } catch (error) {
-      // alert("Something went wrong");
+      alert("Error registering user");
       console.log(error);
     }
   };
@@ -73,7 +79,9 @@ const RegisterForm = () => {
                 <input
                   id="username"
                   type="text"
-                  className="w-full border border-gray-400 p-2 rounded-md focus:outline-none focus:border-blue-500"
+                  className="w-full border border-gray-400 p-2 rounded-md focus:outline-none focus:border-blue-500
+
+"
                   required
                   value={username}
                   onChange={(event) => setUsername(event.target.value)}
@@ -127,20 +135,21 @@ const RegisterForm = () => {
                   onChange={(event) => setConfirmPassword(event.target.value)}
                 />
               </div>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-              >
-                Register
-              </button>
-              <p className="mt-4 text-center">
-                Already have an account?{" "}
+              <div className="mb-4">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+                >
+                  Register
+                </button>
+              </div>
+              <div className="flex justify-between items-center">
                 <Link href="/login">
-                  <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                  <span className="text-blue-500 hover:text-blue-600">
                     Login
-                  </button>
+                  </span>
                 </Link>
-              </p>
+              </div>
             </form>
           </div>
         </div>

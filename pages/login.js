@@ -1,98 +1,118 @@
-import Link from "next/link";
 import { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { setCookie } from "cookies-next";
 import Nav from "../components/Nav";
-import { UserContext } from "../context/UserContext";
-import { useContext } from "react";
-const LoginForm = () => {
+import Link from "next/link";
+
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
-  const { user, setUser } = useContext(UserContext);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
       const response = await axios.post("/api/login", {
         email,
         password,
       });
 
-      const user = response.data;
+      setCookie(null, "SID", response.data.token, {
+        path: "/",
+        maxAge: 30 * 24 * 60 * 60,
+        httpOnly: true,
+      });
 
-      alert("Login successful");
-      router.push("/recipes");
-      setUser(response.data.email);
+      router.push("/");
     } catch (error) {
-      alert("Login failed");
-      console.log(error);
+      setError(error.response.data.error);
     }
   };
 
   return (
     <div>
       <Nav />
-      <div className="min-h-screen bg-gray-100">
-        <div className="flex flex-col justify-center sm:py-12">
-          <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl" />
-            <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-              <form onSubmit={handleSubmit}>
-                <h1 className="text-3xl font-bold mb-8 text-center">Login</h1>
-                <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Email
-                  </label>
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Sign in to your account
+          </h2>
+        </div>
+
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <form onSubmit={handleSubmit}>
+              {error && (
+                <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+                  {error}
+                </div>
+              )}
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email address
+                </label>
+                <div className="mt-1">
                   <input
                     id="email"
+                    name="email"
                     type="email"
-                    className="w-full border border-gray-400 p-2 rounded-md focus:outline-none focus:border-blue-500"
+                    autoComplete="email"
                     required
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="password"
-                    className="block text-gray-700 font-bold mb-2"
-                  >
-                    Password
-                  </label>
+              </div>
+
+              <div className="mt-4">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <div className="mt-1">
                   <input
                     id="password"
+                    name="password"
                     type="password"
-                    className="w-full border border-gray-400 p-2 rounded-md focus:outline-none focus:border-blue-500"
+                    autoComplete="current-password"
                     required
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
                 </div>
+              </div>
+
+              <div className="mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Login
+                  Sign in
                 </button>
-                <p className="mt-4 text-center">
-                  Don&lsquo;t have an account?{" "}
+
+                <div className="mt-2">
                   <Link href="/register">
-                    <button className="text-blue-500 hover:text-blue-600">
-                      Register here
-                    </button>
+                    <span className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                      Dont have an account? Register
+                    </span>
                   </Link>
-                </p>
-              </form>
-            </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default LoginForm;
+}

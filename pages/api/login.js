@@ -1,52 +1,46 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { con } from "../../lib/db";
 import createtoken from "../../lib/token";
 import { setCookie } from "cookies-next";
+import bcrypt from "bcrypt";
+
 export default async function handler(req, res) {
   const { email, password } = req.body;
 
-  const data = await con
+  const [rows] = await con
     .promise()
-    .query(`SELECT * from users where email = '${email}'`);
-  console.log(data);
-  if (data[0].length == 0) {
-    res.status(404).json({ error: "User not found" });
-    return;
-  }
-  // check email
-  if (data[0][0].email != email) {
-    res.status(401).json({ error: "Email is incorrect" });
-    return;
-  }
-  // check password
+    .query("SELECT * FROM users WHERE email = ?", [email]);
 
-  if (data[0][0].password != password) {
-    res.status(401).json({ error: "Password is incorrect" });
-    return;
+  if (rows.length === 0) {
+    return res.status(404).json({
+      error: "The email address you entered does not belong to any account",
+    });
   }
-  // validation EMAIL CHEACK REGULAR EXPRESSION
-  const emailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  if (!email.match(emailRegEx)) {
-    res.status(400).json({ error: "Email is not valid" });
-    return;
-  }
-  if (password.length < 6) {
-    res.status(400).json({ error: "Password must be at least 6 characters" });
-    return;
+  const userId = rows[0].id;
+
+  try {
+    if (userId.password !== password) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Something went wrong" });
   }
 
-  // create token
   const { token, tokenCreationDate } = createtoken();
-  const userID = data[0][0].id;
+
   await con
     .promise()
     .query(
-      `INSERT INTO tokens (token, tokenCreationDate, userID) VALUES ('${token}', '${tokenCreationDate
-        .toISOString()
-        .substr(0, 19)
-        .replace("T", " ")}', '${userID}')`
+      "INSERT INTO tokens (token, tokenCreationDate, userID) VALUES (?, ?, ?)",
+      [
+        token,
+        tokenCreationDate.toISOString().substr(0, 19).replace("T", " "),
+        userId,
+      ]
     );
-  setCookie("SID", token, { req, res, maxAge: 60 * 60 * 24, httpOnly: true });
-  setCookie("email", email, { req, res, maxAge: 60 * 60 * 24 });
+
+  setCookie("SID", token, { req, res, httpOnly: true });
+  setCookie("email", email, { req, res });
+
   res.status(200).json({ email: email });
 }

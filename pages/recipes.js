@@ -1,83 +1,66 @@
-import React from "react";
-import RecipeCard from "../components/RecipeCard";
+import Head from "next/head";
+import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
-import SearchBar from "../components/SearchBar";
-import Link from "next/link";
-const recipes = [
-  {
-    title: "Spaghetti with Meat Sauce",
-    image:
-      "https://res.cloudinary.com/sjlabs/image/upload/c_scale,q_auto,f_auto,w_1024,c_fill/l_GS_Vert-Logo-one-color-white,g_south_east,fl_relative,x_0.03,y_0.03,h_0.28/74126800126.jpg",
-    description: "A classic Italian dish with a hearty meat sauce.",
-  },
-  {
-    title: "Chicken Alfredo",
-    image:
-      "https://iwashyoudry.com/wp-content/uploads/2022/08/Chicken-Alfredo-Low-Res-21.jpg",
-    description: "Creamy fettuccine alfredo with tender chicken.",
-  },
-  {
-    title: "Beef Stir Fry",
-    image:
-      "https://www.foodnetwork.com/content/dam/images/food/fullset/2015/12/16/3/FNM_010116-Beef-Stir-Fry-Recipe_s4x3.jpg",
-    description:
-      "A quick and easy Asian-inspired dish with tender beef and crisp vegetables.",
-  },
 
-  {
-    title: "Pizza",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg",
-    description: "A ITALIAN DISH",
-  },
-  {
-    title: "Hamburger",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Hamburger_%28black_bg%29.jpg/375px-Hamburger_%28black_bg%29.jpg",
-    description: "hamburger with mashroom",
-  },
-  {
-    title: "Falafel",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Falafels_2.jpg/375px-Falafels_2.jpg",
-    description: "Falafel israeli and arabic food",
-  },
-  {
-    title: "Sushi",
-    image:
-      "https://www.justonecookbook.com/wp-content/uploads/2020/01/Sushi-Rolls-Maki-Sushi-%E2%80%93-Hosomaki-1106-II.jpg",
-    description:
-      "Sushi is a Japanese dish of prepared vinegared rice, usually with some sugar and salt",
-  },
-];
-// create a function that the user search for a recipe in the search bar
-const Recipes = () => {
+function Recipes() {
+  const [recipes, setRecipes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    fetch("/api/recipes")
+      .then((response) => response.json())
+      .then((data) => setRecipes(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const filteredRecipes = recipes.filter((recipe) =>
+    recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div>
+    <>
       <Nav />
 
-      <div>
-        <div className="mt-9 text-center algin-center">
-          <SearchBar />
+      <div className="max-w-screen-md mx-auto px-4">
+        <h1 className="text-2xl font-bold mb-4">Recipes</h1>
+
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by title"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            className="border border-gray-400 rounded p-2 w-full"
+          />
         </div>
 
-        <h1 className="mt-6 text-3xl font-bold mb-6 text-center text-gray-900">
-          Recipes
-        </h1>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {recipes &&
-            recipes.map((recipe, index) => (
-              <RecipeCard
-                key={index}
-                title={recipe.title}
-                image={recipe.image}
-                description={recipe.description}
-              />
+        {filteredRecipes.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredRecipes.map((recipe) => (
+              <div
+                key={recipe.id}
+                className="bg-white rounded-lg overflow-hidden shadow-md"
+              >
+                <img
+                  src={recipe.image_url}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-4">
+                  <h2 className="text-lg font-bold mb-2">{recipe.title}</h2>
+                  <p className="text-gray-700 mb-2">{recipe.description}</p>
+                  <p className="text-sm text-gray-500">
+                    By User {recipe.user_id}
+                  </p>
+                </div>
+              </div>
             ))}
-        </div>
+          </div>
+        ) : (
+          <p className="text-gray-700">No recipes yet.</p>
+        )}
       </div>
-    </div>
+    </>
   );
-};
+}
+
 export default Recipes;

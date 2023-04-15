@@ -1,10 +1,56 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
-
+import { FaEye } from "react-icons/fa";
 function Recipes() {
   const [recipes, setRecipes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleLikeClick = async (recipeID) => {
+    try {
+      const res = await fetch("/api/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          recipeID,
+          userID: 1, // Hardcoded user ID for testing purposes
+        }),
+      });
+
+      if (!res.ok) {
+        alert("Failed to add like");
+        throw new Error("Failed to add like");
+      }
+
+      const updatedRecipes = recipes.map((recipe) => {
+        if (recipe.id === recipeID) {
+          return {
+            ...recipe,
+            likes: recipe.likes + 1,
+          };
+        } else {
+          return recipe;
+        }
+      });
+
+      setRecipes(updatedRecipes);
+
+      setIsLiked(true);
+
+      await fetch("/api/recipes", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedRecipes),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/recipes")
@@ -51,6 +97,26 @@ function Recipes() {
                 <div className="p-4">
                   <h2 className="text-lg font-bold mb-2">{recipe.title}</h2>
                   <p className="text-gray-700 mb-2">{recipe.description}</p>
+
+                  <button
+                    className={
+                      "mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm bg-green-600 text-white"
+                    }
+                  >
+                    <FaEye className="mr-2" />
+                  </button>
+
+                  <button
+                    onClick={() => handleLikeClick(recipe)}
+                    disabled={isLiked}
+                    className={`mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm ${
+                      isLiked
+                        ? "bg-red-600 text-white"
+                        : "bg-gray-300 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {isLiked ? "Liked!" : "Like"}
+                  </button>
                   <p className="text-sm text-gray-500">
                     By User {recipe.user_id}
                   </p>

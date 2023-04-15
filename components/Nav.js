@@ -49,19 +49,19 @@ const Nav = () => {
           {user ? (
             <div className="flex items-center text-red-400">
               hello{" "}
-              <p
-                className="text-red-400 inline-block align-baseline font-bold text-sm text-red-400 hover:text-red-800
+              <span
+                className="ml-3 text-red-400 inline-block align-baseline font-bold text-sm text-red-400 hover:text-red-800
               "
               >
                 {user.email}
-              </p>
+              </span>
               <button
                 onClick={() => logOut()}
-                className=" bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className=" flex items-center ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 log out
               </button>
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <button className=" flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 <Link href="/add-recipe">add recipe</Link>
               </button>
             </div>

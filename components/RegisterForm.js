@@ -6,6 +6,7 @@ import { UserContext } from "../context/UserContext";
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { setUser } = useContext(UserContext);
@@ -56,7 +57,7 @@ const RegisterForm = () => {
       alert("You have successfully registered");
       window.location.href = "/recipes";
     } catch (error) {
-      alert("Error registering user");
+      alert(error);
       console.log(error);
     }
   };

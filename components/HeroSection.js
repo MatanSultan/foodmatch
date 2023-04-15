@@ -7,7 +7,7 @@ const HeroSection = () => {
   const router = useRouter();
 
   return (
-    <section className="bg-gray-900 py-12 md:py-20 lg:py-32">
+    <section className="bg-blue-900 py-12 md:py-20 lg:py-32">
       <div className="container mx-auto px-4">
         <div className="md:flex md:flex-col md:justify-center md:items-center">
           <h1 className="text-4xl md:text-6xl text-white font-bold mb-6 md:mb-8 text-center md:text-left">
@@ -19,7 +19,7 @@ const HeroSection = () => {
             our community of passionate foodies and explore new cuisines, share
             recipes, and connect with other food lovers from around the world.
           </p>
-          <button className="bg-white text-gray-900 font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out   ">
+          <button className="bg-white text-gray-900 font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out hover:bg-gray-600  ">
             <Link href="/register   ">get started</Link>
           </button>
         </div>

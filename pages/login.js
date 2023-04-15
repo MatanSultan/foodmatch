@@ -13,6 +13,21 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    //validation the form
+    if (email === "") {
+      setError("Please enter an email");
+      return;
+    }
+    if (password === "") {
+      setError("Please enter a password");
+      return;
+    }
+    // handle with sql injection
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
 
     try {
       const response = await axios.post("/api/login", {
@@ -26,7 +41,8 @@ export default function Login() {
         httpOnly: true,
       });
 
-      router.push("/");
+      window.location.reload();
+      window.location.href = "/recipes";
     } catch (error) {
       setError(error.response.data.error);
     }

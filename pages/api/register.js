@@ -2,6 +2,7 @@ import { set } from "mongoose";
 import { con } from "../../lib/db";
 import createtoken from "../../lib/token";
 import { getCookies, getCookie, setCookie, deleteCookie } from "cookies-next";
+import bcrypt from "bcrypt";
 
 export default async function handler(req, res) {
   const { email, password, username } = req.body;
@@ -18,14 +19,17 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: "User already exists" });
     }
 
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const { token, tokenCreationDate } = createtoken();
     const userResult = await con
       .promise()
-      .query("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [
-        username,
-        email,
-        password,
-      ]);
+      .query(
+        "INSERT INTO users (name, email, password, salt) VALUES (?, ?, ?, ?)",
+        [username, email, hashedPassword, salt]
+      );
 
     const userId = userResult[0].insertId;
 

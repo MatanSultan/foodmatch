@@ -2,10 +2,14 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 import { FaEye } from "react-icons/fa";
+import RecipeStages from "../components/RecipeStages";
+
 function Recipes() {
   const [recipes, setRecipes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLiked, setIsLiked] = useState(false);
+  const [showStages, setShowStages] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const handleLikeClick = async (recipeID) => {
     try {
@@ -66,6 +70,16 @@ function Recipes() {
     recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleViewStagesClick = (recipe) => {
+    setSelectedRecipe(recipe);
+    setShowStages(true);
+  };
+
+  const handleCloseStagesClick = () => {
+    setSelectedRecipe(null);
+    setShowStages(false);
+  };
+
   return (
     <>
       <Nav />
@@ -100,34 +114,52 @@ function Recipes() {
 
                   <button
                     className={
-                      "mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm bg-green-600 text-white"
+                      "mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150" +
+                      (isLiked ? " opacity-50 cursor-not-allowed" : "")
                     }
+                    onClick={() => handleLikeClick(recipe.id)}
                   >
-                    <FaEye className="mr-2" />
+                    <svg
+                      className="-ml-1 mr-2 h-5 w-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+                        clipRule="evenodd"
+                      />
+                      <path
+                        fillRule="evenodd"
+                        d="M10 20a10 10 0 100-20 10 10 0 000 20zm0 2a12 12 0 100-24 12 12 0 000 24z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>{recipe.likes}</span>
                   </button>
 
                   <button
-                    onClick={() => handleLikeClick(recipe)}
-                    disabled={isLiked}
-                    className={`mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm ${
-                      isLiked
-                        ? "bg-red-600 text-white"
-                        : "bg-gray-300 text-gray-700 hover:bg-gray-200"
-                    }`}
+                    className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
+                    onClick={() => handleViewStagesClick(recipe)}
                   >
-                    {isLiked ? "Liked!" : "Like"}
+                    <FaEye className="mr-2" />
+                    <span>View Stages</span>
                   </button>
-                  <p className="text-sm text-gray-500">
-                    By User {recipe.user_id}
-                  </p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-gray-700">No recipes yet.</p>
+          <p>No recipes found</p>
         )}
       </div>
+
+      {showStages && (
+        <RecipeStages
+          recipe={selectedRecipe}
+          onClose={handleCloseStagesClick}
+        />
+      )}
     </>
   );
 }

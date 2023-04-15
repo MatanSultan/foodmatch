@@ -1,8 +1,9 @@
+import { withIronSession } from "next-iron-session";
 import { con } from "../../lib/db";
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   const { recipeID } = req.body;
-  console.log(({ userID } = req.session));
+  const userID = req.session.get("userID");
 
   // Insert a new like into the database
   await con
@@ -19,3 +20,11 @@ export default async function handler(req, res) {
 
   res.status(200).json({ success: true });
 }
+
+export default withIronSession(handler, {
+  password: "some_password_that_is_at_least_32_characters_long",
+  cookieName: "my_session_cookie_name",
+  cookieOptions: {
+    secure: process.env.NODE_ENV === "production",
+  },
+});

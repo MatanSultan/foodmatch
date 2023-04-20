@@ -3,6 +3,7 @@ import SearchBar from "./SearchBar";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
 const RecipeCard = ({ title, image, description }) => {
+  console.log(title, image, description);
   return (
     <>
       <div className=" max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">

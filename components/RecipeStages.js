@@ -1,72 +1,62 @@
 import { useState, useEffect } from "react";
+import Spinner from "./Spinner";
+import AiFillAccountBook from "react-icons/ai";
+import FocusTrap from "focus-trap-react";
 
 function RecipeStages({ recipe, onClose }) {
-  const [stages, setStages] = useState([]);
+  const [steps, setSteps] = useState([]);
 
   useEffect(() => {
-    fetch(`/api/stages?recipeID=${recipe.id}`)
+    fetch(`/api/recipes-steps?recipe_id=${recipe.id}`)
       .then((response) => response.json())
       .then((data) => {
-        setStages(data);
+        setSteps(data);
       })
       .catch((error) => console.error(error));
+
+    // Remove focus from trigger element when modal is open
+    document.activeElement.blur();
+
+    // Add blur effect and focus trap when the modal is open
+    document.body.classList.add("modal-open");
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
   }, [recipe.id]);
 
   return (
-    <div className="fixed z-10 inset-0 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-
-        <span
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-        >
-          &#8203;
-        </span>
-
-        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-          <div className="sm:flex sm:items-start">
-            <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-              {/* Display recipe image */}
-              <img src={recipe.image_url} alt={recipe.title} />
-            </div>
-
-            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                {recipe.title}
-              </h3>
-              <div className="mt-2">
-                {/* Display recipe description */}
-                <p className="text-sm text-gray-500">{recipe.description}</p>
-
-                <div className="mt-4">
-                  {/* Display recipe steps */}
-                  {stages.map((stage) => (
-                    <div key={stage.id} className="flex mb-4">
-                      <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white mr-4">
-                        {stage.step}
-                      </div>
-                      <div>{stage.description}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-5 sm:mt-6">
+    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center">
+      <FocusTrap className="overflow-y-scroll ">
+        <div className="bg-white w-full sm:w-3/4 h-full sm:h-4/5 lg:w-2/3 lg:h-3/4 xl:w-1/2 xl:h-2/3 rounded-lg overflow-hidden shadow-lg">
+          <div className="p-4">
             <button
               onClick={onClose}
-              type="button"
-              className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+              className="absolute top-2 right-2 text-red-500 hover:text-red-600 text-5xl focus:outline-none"
             >
-              Close
+              &times;
             </button>
+            <h2 className="text-center text-lg font-bold mb-2">
+              {recipe.title}
+            </h2>
+          </div>
+          <div className="p-4 overflow-y-scroll">
+            <h2 className="text-center text-blue-600 text-lg font-bold mb-2">
+              Preparation steps
+            </h2>
+            {steps.length > 0 ? (
+              <ol className="list-decimal list-inside text-blue-900">
+                {steps.map((step, index) => (
+                  <li key={index}>{step}</li>
+                ))}
+              </ol>
+            ) : (
+              <div className="flex justify-center items-center">
+                <Spinner />
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      </FocusTrap>
     </div>
   );
 }

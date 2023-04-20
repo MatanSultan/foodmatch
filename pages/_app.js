@@ -5,6 +5,7 @@ import { getCookie } from "cookies-next";
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
+
   const emailCookie = getCookie("email");
   useEffect(() => {
     if (emailCookie) {

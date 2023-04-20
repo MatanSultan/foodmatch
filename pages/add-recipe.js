@@ -45,9 +45,9 @@ function AddRecipe() {
       return;
     }
     setErrors({});
-
+    console.log(title, description, imageUrl, steps);
     try {
-      const res = await fetch("/api/recipes", {
+      const res = await fetch("/api/addrecipe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,7 +129,7 @@ function AddRecipe() {
               htmlFor=" description"
               className="block text-gray-700 font-bold"
             >
-              Description : 
+              Description :
             </label>
             <textarea
               id="description"
@@ -206,7 +206,6 @@ function AddRecipe() {
               ))}
             </ul>
           </div>
-         
 
           <button
             type="submit"

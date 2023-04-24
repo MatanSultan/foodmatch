@@ -7,14 +7,18 @@ import { AiFillHome } from "react-icons/ai";
 import { SiAboutdotme } from "react-icons/si";
 import { FaBookReader } from "react-icons/fa";
 import { BsCalendarEvent } from "react-icons/bs";
-
+import { useRouter } from "next/router";
+import { MdOutlineSlowMotionVideo } from "react-icons/md";
 const Nav = () => {
   const { user, setUser } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
 
   async function logOut() {
     setUser(null);
     await axios.get("/api/logout");
+    //reload the page
+    router.reload();
   }
 
   const toggleMenu = () => {
@@ -69,6 +73,16 @@ const Nav = () => {
                 Events
               </span>
             </Link>
+            <Link href="/videos" passHref>
+              <span
+                className="flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
+                aria-label="Add a video"
+              >
+                <MdOutlineSlowMotionVideo className="mr-1" />
+                Videos
+              </span>
+            </Link>
+
             {user && (
               <Link href="/foru" passHref>
                 <span
@@ -100,38 +114,38 @@ const Nav = () => {
               </div>
 
               {/* // profile button  */}
-              <Link href="/profile" passHref>
-                <span
+              <Link href="/Profile" passHref>
+                <button
                   className="bg-blue-900 flex items-center text-sm mr-2 py-2 px-2 text-white hover:text-gray-900 transition-colors duration-200"
                   aria-label="Go to your profile"
                 >
                   Profile
-                </span>
+                </button>
               </Link>
 
               {/* // add-recipe button  */}
               <Link href="/add-recipe" passHref>
-                <span
+                <button
                   className=" bg-green-500 flex items-center text-sm py-2 px-2 text-white hover:text-gray-900 transition-colors duration-200"
                   aria-label="Add a recipe"
                 >
                   Add Recipe
-                </span>
+                </button>
               </Link>
             </div>
           ) : (
             <div className="flex items-center">
               <Link href="/login" passHref>
                 <span
-                  className="flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
+                  className="bg-green-500  flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
                   aria-label="Log in to your account"
                 >
                   Log In
                 </span>
               </Link>
-              <Link href="/signup" passHref>
+              <Link href="/register" passHref>
                 <span
-                  className="flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
+                  className=" bg-indigo-600  flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
                   aria-label="Sign up for an account"
                 >
                   Sign Up
@@ -203,6 +217,15 @@ const Nav = () => {
                 Events
               </span>
             </Link>
+            <Link href="/videos" passHref>
+              <span
+                className="block text-sm px-2 py-2 text-white hover:text-gray-900 transition-colors duration-200"
+                aria-label="Browse our events"
+              >
+                <MdOutlineSlowMotionVideo className="mr-1" />
+                videos
+              </span>
+            </Link>
             {user && (
               <Link href="/foru" passHref>
                 <span
@@ -222,25 +245,25 @@ const Nav = () => {
           <div className="px-2 pt-2 pb-4">
             {user ? (
               <div className="flex items-center">
-                <div className="text-black text-sm mr-4 py-2 px-4">
+                <div className="text-gray-800 text-md  py-2 px-4">
                   Welcome {user.email}
                   {/* // profile button  */}
-                  <Link href="/profile" passHref>
-                    <span
-                      className="mt-2 bg-blue-900 flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
+                  <Link href="/Profile" passHref>
+                    <button
+                      className="bg-indigo-600 flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
                       aria-label="Go to your profile"
                     >
                       Profile
-                    </span>
+                    </button>
                   </Link>
                   {/* // add-recipe button  */}
                   <Link href="/add-recipe" passHref>
-                    <span
-                      className="mt-2 bg-green-500 flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
+                    <button
+                      className=" mt-2 bg-green-500  flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
                       aria-label="Add a recipe"
                     >
                       Add Recipe
-                    </span>
+                    </button>
                   </Link>
                   <button
                     className="mt-2 bg-red-500 flex items-center text-sm mr-4 py-2 px-4 text-white hover:text-gray-900 transition-colors duration-200"
@@ -260,7 +283,7 @@ const Nav = () => {
                     Log In
                   </span>
                 </Link>
-                <Link href="/signup" passHref>
+                <Link href="/register" passHref>
                   <span
                     className="bg-blue-900 block text-sm px-2 py-2 text-white hover:text-gray-900 transition-colors duration-200 "
                     aria-label="Sign up for an account"

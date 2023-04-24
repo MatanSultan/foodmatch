@@ -19,6 +19,25 @@ export default async function handler(req, res) {
       return res.status(409).json({ error: "User already exists" });
     }
 
+    //validatetion
+    if (!email || !password || !username) {
+      return res.status(400).json({ error: "Missing fields" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: "Password too short" });
+    }
+
+    if (username.length < 3) {
+      return res.status(400).json({ error: "Username too short" });
+    }
+
+    //email validation
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email" });
+    }
+
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password, salt);

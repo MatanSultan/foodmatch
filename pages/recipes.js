@@ -12,6 +12,7 @@ function Recipes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showStages, setShowStages] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleLikeClick = async (recipeID) => {
     try {
@@ -25,7 +26,7 @@ function Recipes() {
         }),
       });
       if (res.status == "401") {
-        alert("You are not logged in");
+        alert("You must be logged in to like a recipe");
       } else if (!res.ok) {
         alert("Failed to add or remove like");
         throw new Error("Failed to add or remove like");
@@ -80,7 +81,6 @@ function Recipes() {
 
       <div className="max-w-screen-md mx-auto px-4">
         <h1 className="mt-12 text-2xl font-bold mb-4">Recipes</h1>
-
         <div className="mb-4">
           <input
             type="text"
@@ -90,7 +90,6 @@ function Recipes() {
             className="border border-gray-400 rounded p-2 w-full"
           />
         </div>
-
         {filteredRecipes.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredRecipes.map((recipe) => (

@@ -9,14 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/analytics": "^0.9.5",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@heroicons/react": "^1.0.6",
     "axios": "^1.3.5",
     "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cookies-next": "^2.1.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "firebase": "^9.20.0",
     "focus-trap-react": "^10.1.1",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.2.0",
@@ -39,5 +43,20 @@
     "eslint-config-next": "13.3.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1"
-  }
+  },
+  "description": "Description: FoodMatch is a social networking platform for food lovers around the world. Users can create profiles, share recipes, review restaurants, and connect with other foodies in their area. The platform features a recommendation engine that suggests dishes and restaurants based on users' preferences and previous activity. FoodMatch also hosts virtual cooking classes and food-related events, allowing users to learn new skills and connect with like-minded individuals. Whether you're a seasoned chef or a beginner cook, FoodMatch is the perfect platform for discovering new flavors and building a community around your love of food.",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatanSultan/foodmatch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatanSultan/foodmatch/issues"
+  },
+  "homepage": "https://github.com/MatanSultan/foodmatch#readme"
 }

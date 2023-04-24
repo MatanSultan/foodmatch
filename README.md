@@ -1,6 +1,6 @@
 Description: FoodMatch is a social networking platform for food lovers around the world. Users can create profiles, share recipes, review restaurants, and connect with other foodies in their area. The platform features a recommendation engine that suggests dishes and restaurants based on users' preferences and previous activity. FoodMatch also hosts virtual cooking classes and food-related events, allowing users to learn new skills and connect with like-minded individuals. Whether you're a seasoned chef or a beginner cook, FoodMatch is the perfect platform for discovering new flavors and building a community around your love of food.
 
-I built a recipe site using NEXTJS & planetscale, the user is registered, he is logged in automatically, a TOKEN and a cookie are saved, currently the passwords in the database are not encrypted
+I built a recipe site using NEXTJS & planetscale, the user is registered, he is logged in automatically, a TOKEN and a cookie are saved,
 The user table looks like this:
 
 TABLE `users` (

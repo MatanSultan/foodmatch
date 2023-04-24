@@ -25,13 +25,13 @@ function RecipeStages({ recipe, onClose }) {
   }, [recipe.id]);
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center">
+    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 flex items-center justify-center">
       <FocusTrap className="overflow-y-scroll ">
         <div className="bg-white w-full sm:w-3/4 h-full sm:h-4/5 lg:w-2/3 lg:h-3/4 xl:w-1/2 xl:h-2/3 rounded-lg overflow-hidden shadow-lg">
           <div className="p-4">
             <button
               onClick={onClose}
-              className="absolute top-2 right-2 text-red-500 hover:text-red-600 text-5xl focus:outline-none"
+              className="absolute top-2 right-2 text-red-500 hover:text-red-600 text-5xl font-bold focus:outline-none"
             >
               &times;
             </button>
@@ -39,7 +39,7 @@ function RecipeStages({ recipe, onClose }) {
               {recipe.title}
             </h2>
           </div>
-          <div className="p-4 overflow-y-scroll">
+          <div className="p-4">
             <h2 className="text-center text-blue-600 text-lg font-bold mb-2">
               Preparation steps
             </h2>

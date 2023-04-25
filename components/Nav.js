@@ -18,7 +18,7 @@ const Nav = () => {
     setUser(null);
     await axios.get("/api/logout");
     //reload the page
-    router.reload();
+    // router.reload();
   }
 
   const toggleMenu = () => {

@@ -27,8 +27,8 @@ const HeroSection = () => {
           <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
             <div className="relative w-96 h-72 md:w-auto md:h-auto">
               <Image
-                src="/images/foodies"
-                alt="hero image"
+                src="/images/foodies.gif"
+                alt="A group of people enjoying food together."
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"

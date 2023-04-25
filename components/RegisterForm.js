@@ -53,6 +53,7 @@ const RegisterForm = () => {
         email,
         password,
       });
+      ///
       setUser({ username, email });
       alert("You have successfully registered");
       window.location.href = "/recipes";

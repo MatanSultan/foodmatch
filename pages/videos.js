@@ -10,20 +10,19 @@ const VideosPage = () => {
   const [loading, setLoading] = useState(true); // set initial loading state to true
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
+    // const abortController = new AbortController();
+    // const signal = abortController.signal;
 
-    fetch("/api/getvideo", { signal })
+    fetch("/api/getvideo", {})
       .then((response) => response.json())
       .then((data) => {
         setVideos(data);
+
         setLoading(false); // set loading to false after data is fetched
       })
       .catch((error) => console.error(error));
 
-    return function cleanup() {
-      abortController.abort();
-    };
+    return;
   }, []);
 
   const handleSearchChange = (event) => {
@@ -87,7 +86,7 @@ const VideosPage = () => {
             </div>
             {loading ? (
               <div className="flex justify-center">
-                <Spinner/>
+                <Spinner />
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -97,11 +96,11 @@ const VideosPage = () => {
                     className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:shadow-md"
                   >
                     <div className="flex justify-between">
-                    <video
-                      className="w-full h-48 object-cover"
-                      src={video.video_url}
-                      controls
-                    ></video>
+                      <video
+                        className="w-full h-48 object-cover"
+                        src={video.video_url}
+                        controls
+                      ></video>
                     </div>
                     <div className="flex justify-between">
                       <div className="flex items-center">
@@ -126,9 +125,7 @@ const VideosPage = () => {
                         {video.description}
                       </p>
                     </div>
-                    
-
-  </div>
+                  </div>
                 ))}
               </div>
             )}

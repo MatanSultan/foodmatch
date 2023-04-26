@@ -36,6 +36,7 @@ export default function AddVideos() {
     try {
       await uploadBytes(storageRef, videoFile);
       console.log("Uploaded a blob or file!");
+      alert("Video uploaded successfully");
     } catch (error) {
       console.log(error);
       return;

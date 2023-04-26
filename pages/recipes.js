@@ -101,6 +101,10 @@ function Recipes() {
                   <img
                     src={recipe.image_url}
                     className="w-full h-64 object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/no-image.jpg";
+                    }}
                   />
                 </Link>
                 <div className="p-4">

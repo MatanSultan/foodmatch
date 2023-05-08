@@ -1,5 +1,5 @@
 {
-  "name": "foodmatch",
+  "name": "foodies",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -57,12 +57,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MatanSultan/foodmatch.git"
+    
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MatanSultan/foodmatch/issues"
+   
   },
-  "homepage": "https://github.com/MatanSultan/foodmatch#readme"
+ 
 }

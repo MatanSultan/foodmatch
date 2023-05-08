@@ -1,9 +1,7 @@
 import Head from "next/head";
 import { useState } from "react";
 import Nav from "../components/Nav";
-import storage from "../lib/firebase";
-import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
-import crypto from "crypto";
+
 function AddRecipe() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -12,7 +10,6 @@ function AddRecipe() {
   const [currentStep, setCurrentStep] = useState("");
   const [errors, setErrors] = useState({});
   // const [user_id, setUser_id] = useState();
-  const [imageFile, setImageFile] = useState(null);
 
   const validate = () => {
     const errors = {};
@@ -48,20 +45,7 @@ function AddRecipe() {
       return;
     }
     setErrors({});
-    // console.log(title, description, imageUrl, steps);
-    const url = crypto.randomBytes(16).toString("hex") + imageUrl;
-    const storageRef = ref(storage, "images/" + url);
-
-    try {
-      await uploadBytes(storageRef, imageFile);
-      console.log("Uploaded a blob or file!");
-      alert("image uploaded successfully");
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-    const urlDownloadURL = await getDownloadURL(storageRef);
-
+    console.log(title, description, imageUrl, steps);
     try {
       const res = await fetch("/api/addrecipe", {
         method: "POST",
@@ -71,7 +55,7 @@ function AddRecipe() {
         body: JSON.stringify({
           title,
           description,
-          imageUrl: urlDownloadURL,
+          imageUrl,
           steps,
         }),
       });
@@ -161,13 +145,12 @@ function AddRecipe() {
             )}
           </div>
 
-          {/* //image  upload */}
           <div className="mb-4">
             <label htmlFor="imageUrl" className="block text-gray-700 font-bold">
-              Image
+              Image URL
             </label>
             <input
-              type="file"
+              type="text"
               id="imageUrl"
               value={imageUrl}
               onChange={(event) => setImageUrl(event.target.value)}

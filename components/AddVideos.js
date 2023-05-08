@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import storage from "../lib/firebase";
+import { storage } from "../lib/firebase";
+import Alert from "./Alert";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
 import crypto from "crypto";
 import Nav from "../components/Nav";
@@ -10,6 +11,8 @@ export default function AddVideos() {
   const [description, setDescription] = useState("");
   const [videoFile, setVideoFile] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -22,6 +25,14 @@ export default function AddVideos() {
   const handleVideoFileChange = (event) => {
     setVideoFile(event.target.files[0]);
   };
+  // fuction to validate the form
+  const validateForm = () => {
+    if (!title || !description || !videoFile) {
+      setError("Please fill all the fields");
+      return false;
+    }
+    return true;
+  };
 
   const handleVideoSubmit = async (event) => {
     event.preventDefault();
@@ -32,11 +43,14 @@ export default function AddVideos() {
     formData.append("video", videoFile);
     const url = crypto.randomBytes(32).toString("hex") + videoFile.name;
     const storageRef = ref(storage, "videos/" + url);
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       await uploadBytes(storageRef, videoFile);
       console.log("Uploaded a blob or file!");
-      alert("Video uploaded successfully");
+      setSuccess("Video uploaded successfully");
     } catch (error) {
       console.log(error);
       return;
@@ -59,6 +73,7 @@ export default function AddVideos() {
       // setDescription("");
       // setVideoFile(null);
     } catch (error) {
+      alert("An error occurred, try again.");
       console.log(error);
     }
 
@@ -81,6 +96,19 @@ export default function AddVideos() {
     <div>
       <Nav />
       <div className="max-w-md mx-auto">
+        {success && (
+          <div>
+            {" "}
+            <Alert message={success} type="success" />
+          </div>
+        )}
+        {error && (
+          <div>
+            {" "}
+            <Alert message={error} type="error" />
+          </div>
+        )}
+
         <h1 className="text-3xl font-bold text-gray-900">Videos</h1>
         <div className="mt-8 space-y-6">
           <form onSubmit={handleVideoSubmit}>

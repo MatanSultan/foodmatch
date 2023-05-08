@@ -8,6 +8,9 @@ function EventsPage() {
   const [events, setEvents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+// hendel date and time 
+
+
 
   useEffect(() => {
     axios.get("/api/events").then((res) => {

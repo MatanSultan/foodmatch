@@ -20,20 +20,20 @@ const HeroSection = () => {
               share recipes, and connect with other food lovers from around the
               world.
             </p>
-            <button className="bg-white text-gray-900 font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out hover:bg-gray-600">
+            <button className="text-center ite bg-white text-gray-900 font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out hover:bg-gray-600">
               <Link href="/register">Get Started</Link>
             </button>
           </div>
           <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
             <div className="relative w-96 h-72 md:w-auto md:h-auto">
-              <Image
+              {/* <Image
                 src="/images/foodies.gif"
                 alt="A group of people enjoying food together."
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
                 className="rounded-lg shadow-lg"
-              />
+              /> */}
             </div>
           </div>
         </div>

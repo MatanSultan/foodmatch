@@ -6,7 +6,7 @@ import RecipeStages from "../components/RecipeStages";
 import Spinner from "../components/Spinner";
 import { GiSelfLove } from "react-icons/gi";
 import Link from "next/link";
-
+import Alert from "../components/Alert";
 function Recipes() {
   const [recipes, setRecipes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,9 +26,9 @@ function Recipes() {
         }),
       });
       if (res.status == "401") {
-        alert("You must be logged in to like a recipe");
+        setError("Please login to like the recipe");
       } else if (!res.ok) {
-        alert("Failed to add or remove like");
+        setError("Failed to add or remove like");
         throw new Error("Failed to add or remove like");
       } else {
         setRecipes((prevRecipes) => {
@@ -55,11 +55,16 @@ function Recipes() {
     fetch("/api/recipes")
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
+        console.log(data.id);
         setRecipes(data);
       })
       .catch((error) => console.error(error));
   }, []);
+
+  if (!Array.isArray(recipes)) {
+    console.error("recipes is not an array!");
+    return;
+  }
 
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -79,7 +84,14 @@ function Recipes() {
     <>
       <Nav />
 
-      <div className="max-w-screen-md mx-auto px-4">
+      <div className="max-w-screen-md mx-auto px-4 mt-12">
+        {error && (
+          <div>
+            {" "}
+            <Alert message={error} type="error" />
+          </div>
+        )}
+
         <h1 className="mt-12 text-2xl font-bold mb-4">Recipes</h1>
         <div className="mb-4">
           <input
@@ -130,7 +142,7 @@ function Recipes() {
                     <span>View steps</span>
                   </button>
                 </div>
-                <p>{` (recipe id:  ${recipe.id})`}</p>
+                <p>{` (by :  ${recipe.username})`}</p>
               </div>
             ))}
           </div>

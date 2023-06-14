@@ -39,7 +39,7 @@
     "react": "^18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
-    "react-google-login": "^5.2.2",
+ 
     "react-icons": "^4.8.0",
     "vercel": "^28.18.5"
   },
@@ -50,19 +50,18 @@
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.1"
   },
-  "description": "Description: FoodMatch is a social networking platform for food lovers around the world. Users can create profiles, share recipes, review restaurants, and connect with other foodies in their area. The platform features a recommendation engine that suggests dishes and restaurants based on users' preferences and previous activity. FoodMatch also hosts virtual cooking classes and food-related events, allowing users to learn new skills and connect with like-minded individuals. Whether you're a seasoned chef or a beginner cook, FoodMatch is the perfect platform for discovering new flavors and building a community around your love of food.",
+  "description": "FoodMatch is a social networking platform for food lovers around the world. Users can create profiles, share recipes, review restaurants, and connect with other foodies in their area. The platform features a recommendation engine that suggests dishes and restaurants based on users' preferences and previous activity. FoodMatch also hosts virtual cooking classes and food-related events, allowing users to learn new skills and connect with like-minded individuals. Whether you're a seasoned chef or a beginner cook, FoodMatch is the perfect platform for discovering new flavors and building a community around your love of food.",
   "main": "next.config.js",
   "directories": {
     "lib": "lib"
   },
   "repository": {
     "type": "git",
-    
+    "url": "https://github.com/MatanSultan/foodmatch"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-   
-  },
- 
+    "url": "https://github.com/MatanSultan/foodmatch/issues"
+  }
 }

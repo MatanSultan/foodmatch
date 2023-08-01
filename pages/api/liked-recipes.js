@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
       const userID = auth.user.id;
-  
+
       // Query the database to get the user's liked recipes
       const [likedRecipesRows] = await con
         .promise()
@@ -18,20 +18,9 @@ export default async function handler(req, res) {
           "SELECT r.id, r.title, r.image_url, r.description FROM recipes r JOIN likes l ON r.id = l.recipeID WHERE l.userID = ?",
           userID
         );
-  
-      // Set the recipes variable to the user's liked recipes
+
       const recipes = [...likedRecipesRows];
-  
-      // Query the database to get some recommended recipes
-      // const [recommendedRecipesRows] = await con
-      //   .promise()
-      //   .query(
-      //     "SELECT r.id, r.title, r.image_url, r.description FROM recipes r ORDER BY likes "
-      //   );
-  
-      // Combine the user's liked recipes and the recommended recipes
-      // const recipes = [...likedRecipesRows, ...recommendedRecipesRows];
-  
+
       // Return the combined recipes
       return res.status(200).json({ likedRecipes: recipes });
     } catch (err) {
@@ -41,5 +30,4 @@ export default async function handler(req, res) {
   } else {
     return res.status(405).json({ error: "Method not allowed" });
   }
-  
 }

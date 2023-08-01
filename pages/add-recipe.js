@@ -9,7 +9,7 @@ function AddRecipe() {
   const [steps, setSteps] = useState([]);
   const [currentStep, setCurrentStep] = useState("");
   const [errors, setErrors] = useState({});
-  // const [user_id, setUser_id] = useState();
+  const [user_id, setUser_id] = useState();
 
   const validate = () => {
     const errors = {};

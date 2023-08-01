@@ -37,7 +37,7 @@ const RegisterForm = () => {
 
       // Set the user context with the registered user data
       setUser({ username: displayName, email });
-      setSuccess("You have successfully registered by google");
+      setSuccess(email + "You have successfully registered by google");
       // Redirect to the recipes page
     } catch (error) {
       console.error(error);

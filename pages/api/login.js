@@ -4,8 +4,32 @@ import { setCookie } from "cookies-next";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 
+import { OAuth2Client } from "google-auth-library";
+async function getUserFromGoogleToken(token) {
+  const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: GOOGLE_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  const email = payload.email;
+
+  return { email };
+}
+
 export default async function handler(req, res) {
   const { email, password } = req.body;
+  async function getUserFromGoogleToken(token) {
+    const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const email = payload.email;
+    // כאן אתה יכול להוסיף עוד פרטים של המשתמש מתוך ה-payload
+    return { email };
+  }
 
   const [rows] = await con
     .promise()

@@ -87,6 +87,7 @@ const VideosPage = () => {
                 className="block w-full rounded-md border-gray-300 pl-10 pr-3 py-2 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:z-10 sm:text-sm"
               />
             </div>
+
             {loading ? (
               <div className="flex justify-center">
                 <Spinner />
@@ -96,31 +97,28 @@ const VideosPage = () => {
                 {filteredVideos.map((video) => (
                   <div
                     key={video.id}
-                    className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:shadow-md"
+                    className="relative rounded-lg border border-gray-300 bg-white shadow-sm hover:shadow-md"
                   >
-                    <div className="flex justify-between">
+                    <div className="aspect-w-16 aspect-h-9">
                       <video
-                        className="w-full h-48 object-cover"
+                        className="w-full h-full object-cover rounded-t-lg"
                         src={video.video_url}
                         controls
                       ></video>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="p-4 flex justify-between items-center">
                       <div className="flex items-center">
                         <HeartIcon
                           className={`h-5 w-5 ${
                             video.liked ? "text-red-500" : "text-gray-400"
-                          }`}
+                          } cursor-pointer`}
                           onClick={() => handleLike(video.id)}
                         />
                         <span className="ml-1">{video.likes}</span>
                       </div>
-                      <div className="flex items-center">
-                        <ChatIcon className="h-5 w-5 text-gray-400" />
-                        <span className="ml-1">{video.comments}</span>
-                      </div>
+                      <div className="flex items-center"></div>
                     </div>
-                    <div className="mt-4">
+                    <div className="p-4">
                       <h3 className="text-lg font-medium text-gray-900">
                         {video.title}
                       </h3>

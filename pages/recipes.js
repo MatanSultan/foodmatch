@@ -142,7 +142,9 @@ function Recipes() {
                     <span>View steps</span>
                   </button>
                 </div>
-                <p>{` (by :  ${recipe.username})`}</p>
+                <p>{`(by : ${
+                  recipe.username ? recipe.username : "Anonymous"
+                })`}</p>
               </div>
             ))}
           </div>

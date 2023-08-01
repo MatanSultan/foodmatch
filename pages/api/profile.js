@@ -37,7 +37,7 @@ export default async function handler(req, res) {
         throw new Error("User details not updated.");
       }
 
-      // Fetch the updated user details from the database
+      // Fetch the updated user details from the database and googel auth
       const [updatedUser] = await con
         .promise()
         .query(`SELECT * FROM users WHERE id = ${auth.id}`);
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         throw new Error("User details not found.");
       }
       // do log out
-      // logout(req, res);
+      logout(req, res);
 
       res.status(200).json(result);
     }

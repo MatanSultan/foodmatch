@@ -6,18 +6,26 @@ import Nav from "../components/Nav";
 import Link from "next/link";
 import { auth } from "../lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-
+import Alert from "/components/alert";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const googelAuth = new GoogleAuthProvider();
+  const [success, setSuccess] = useState("");
+  const [username, setUser] = useState("");
+  const googleAuth = new GoogleAuthProvider();
+  //...
   const handleGoogleLogin = async () => {
     try {
-      const res = await signInWithPopup(auth, googelAuth);
-      console.log(res);
+      const res = await signInWithPopup(auth, googleAuth);
+      const email = res.user.email; // הוסף שורה זו כדי לקבל את ה-email מתוך התשובה
+      setEmail(email);
+      setUser({ username, email });
+      setSuccess("You have successfully log in");
+      window.location.href = "/recipes";
     } catch (error) {
       console.error(error);
+      setError(error.message);
     }
   };
 
@@ -62,6 +70,18 @@ export default function Login() {
 
   return (
     <div>
+      {error && (
+        <div>
+          {" "}
+          <Alert message={error} type="error" />
+        </div>
+      )}
+      {success && (
+        <div>
+          {" "}
+          <Alert message={success} type="success" />
+        </div>
+      )}
       <Nav />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">

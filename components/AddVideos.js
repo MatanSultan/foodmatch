@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { storage } from "../lib/firebase";
 import Alert from "./Alert";
-import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import crypto from "crypto";
 import Nav from "../components/Nav";
 export default function AddVideos() {
@@ -37,59 +37,49 @@ export default function AddVideos() {
   const handleVideoSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("video", videoFile);
-    const url = crypto.randomBytes(32).toString("hex") + videoFile.name;
-    const storageRef = ref(storage, "videos/" + url);
     if (!validateForm()) {
       return;
     }
+
+    const url = crypto.randomBytes(32).toString("hex") + videoFile.name;
+    const storageRef = ref(storage, "videos/" + url);
 
     try {
       await uploadBytes(storageRef, videoFile);
       console.log("Uploaded a blob or file!");
       setSuccess("Video uploaded successfully");
     } catch (error) {
+      alert(
+        error.message === "not logged in"
+          ? "You need to be logged in to upload a video."
+          : "An error occurred, try again."
+      );
       console.log(error);
-      return;
     }
+
     const urlDownloadURL = await getDownloadURL(storageRef);
 
-    try {
-      const response = await fetch("/api/video", {
-        method: "POST",
-        body: JSON.stringify({
-          title,
-          description,
-          videoUrl: urlDownloadURL,
-        }),
-      });
+    const videoData = {
+      title,
+      description,
+      videoUrl: urlDownloadURL,
+    };
 
-      // const data = await response.json();
-      // setVideos([...videos, { id: data.id, title, description }]);
-      // setTitle("");
-      // setDescription("");
-      // setVideoFile(null);
-    } catch (error) {
-      alert("An error occurred, try again.");
-      console.log(error);
-    }
-
-    //   fetch("/api/video", {
-    //     method: "POST",
-    //     body: formData,
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       setVideos([...videos, { id: data.id, title, description }]);
-
-    //       setTitle("");
-    //       setDescription("");
-    //       setVideoFile(null);
-    //     })
-    //     .catch((error) => console.error(error));
+    fetch("/api/video", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(videoData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setVideos([...videos, { id: data.id, title, description }]);
+        setTitle("");
+        setDescription("");
+        setVideoFile(null);
+      })
+      .catch((error) => console.error(error));
   };
 
   return (

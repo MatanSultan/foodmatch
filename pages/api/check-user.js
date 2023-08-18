@@ -1,4 +1,4 @@
-import { con } from "../../../../lib/db";
+import { con } from "../../lib/db";
 
 export default async function handler(req, res) {
   const email = req.query.email;

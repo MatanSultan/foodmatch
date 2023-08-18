@@ -49,6 +49,27 @@ export default function Profile() {
 
     return isValid;
   };
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const logout = async () => {
+    try {
+      // Call your backend API to invalidate the session/token
+      await axios.post("/api/logout");
+
+      // Clear local user data (if stored in local state or local storage)
+      setUser(null);
+
+      // Redirect to login page or home page
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,6 +82,8 @@ export default function Profile() {
       setUser(response.data);
       alert("User details updated successfully.");
       setError("");
+      // Logout user after successful update
+      logout();
     } catch (error) {
       console.error(error);
       setError("Error updating user details.");
@@ -86,6 +109,10 @@ export default function Profile() {
                     <div className="text-2xl font-semibold text-blue-900">
                       <span className="flex justify-center items-center h-full">
                         <CgProfile />
+                      </span>
+                      <span className="flex justify-center items-center h-full">
+                        note: after you click to button &#34;update&#34;its
+                        update the details and logout you automatically
                       </span>
                       <form onSubmit={handleSubmit}>
                         <div className="mb-4">

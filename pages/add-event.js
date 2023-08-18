@@ -16,7 +16,7 @@ function AddEventPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(eventData),
+      body: JSON.stringify({ eventData }), // Wrap eventData in an object
     })
       .then((response) => response.json())
       .then((data) => {

@@ -24,25 +24,37 @@ const RegisterForm = () => {
   const handleGoogleLogin = async () => {
     try {
       const { user } = await signInWithPopup(auth, googleAuthProvider);
-      const { email, displayName } = user;
+      const { email, displayName, uid } = user;
 
-      // Call your registration API with the Google user data
+      // Check if the user already exists
+      const checkUser = await axios.get(`/api/checkUser/${uid}`);
+
+      if (checkUser.data.exists) {
+        // If the user exists, simply log them in and return
+        setUser({ username: displayName, email });
+        setSuccess(email + "You have successfully logged in by Google");
+        return;
+      }
+
+      // If user doesn't exist, continue with the registration process
       await axios.put("/api/register", {
         username: displayName,
         email,
-        google_id: user.uid,
+        google_id: uid,
         google_email: email,
         google_name: displayName,
       });
 
       // Set the user context with the registered user data
       setUser({ username: displayName, email });
-      setSuccess(email + "You have successfully registered by google");
+      setSuccess(email + "You have successfully registered by Google");
       // Redirect to the recipes page
     } catch (error) {
       console.error(error);
+      setError(error.message);
     }
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 

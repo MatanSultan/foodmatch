@@ -1,46 +1,48 @@
-// import nodemailer from "nodemailer";
+// pages/api/send-email.js
+import nodemailer from "nodemailer";
 
-// export default async (req, res) => {
-//   if (req.method !== "POST") {
-//     return res.status(405).json({ message: "Method Not Allowed" });
-//   }
+export default async function handler(req, res) {
+  if (req.method === "POST") {
+    const { eventData } = req.body;
 
-//   const { eventData } = req.body;
+    // Configure transporter (Replace with your email configuration)
+    let transporter = nodemailer.createTransport({
+      service: "Outlook365", // if using outlook
+      auth: {
+        user: "traibo-dev@outlook.com",
+        pass: "ntWP2C1waCeENsoDBkRX",
+      },
+    });
 
-//   if (!eventData) {
-//     return res.status(400).json({ message: "Missing event data" });
-//   }
+    // Set email data
+    let mailOptions = {
+      from: "traibo-dev@outlook.com",
+      to: "matansultan1@gmail.com", // where you want to send the email for approval
+      subject: "New Event Submission..",
+      text: `
+        Event Title: ${eventData.title}
+        Date: ${eventData.date}
+        Time: ${eventData.time}
+        Location: ${eventData.location}
+        Description: ${eventData.description}
+      `,
+    };
 
-//   try {
-//     // Create a SMTP transporter
-//     const transporter = nodemailer.createTransport({
-//       host: process.env.SMTP_HOST,
-//       port: process.env.SMTP_PORT,
-//       auth: {
-//         user: process.env.SMTP_USER,
-//         pass: process.env.SMTP_PASSWORD,
-//       },
-//     });
-
-//     // Send mail with defined transport object
-//     const info = await transporter.sendMail({
-//       from: process.env.FROM_EMAIL,
-//       to: process.env.TO_EMAIL,
-//       subject: "New Event Submission",
-//       html: `
-//         <p><strong>Event Title:</strong> ${eventData.title}</p>
-//         <p><strong>Date:</strong> ${eventData.date}</p>
-//         <p><strong>Time:</strong> ${eventData.time}</p>
-//         <p><strong>Location:</strong> ${eventData.location}</p>
-//         <p><strong>Description:</strong> ${eventData.description}</p>
-//       `,
-//     });
-
-//     console.log("Message sent: %s", info.messageId);
-
-//     res.status(200).json({ message: "Email sent successfully" });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Failed to send email" });
-//   }
-// };
+    // Send email
+    try {
+      let info = await transporter.sendMail(mailOptions);
+      return res
+        .status(200)
+        .json({ success: true, message: "Email sent successfully!" });
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return res
+        .status(500)
+        .json({ success: false, message: "Error sending email." });
+    }
+  } else {
+    // Handle any other HTTP methods
+    res.setHeader("Allow", ["POST"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}

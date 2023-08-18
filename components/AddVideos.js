@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { storage } from "../lib/firebase";
-
+import Alert from "./Alert";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
 import crypto from "crypto";
 import Nav from "../components/Nav";

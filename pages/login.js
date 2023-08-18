@@ -6,7 +6,7 @@ import Nav from "../components/Nav";
 import Link from "next/link";
 import { auth } from "../lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import Alert from "/components/alert";
+import Alert from "../components/Alert";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,18 +14,40 @@ export default function Login() {
   const [success, setSuccess] = useState("");
   const [username, setUser] = useState("");
   const googleAuth = new GoogleAuthProvider();
-  //...
   const handleGoogleLogin = async () => {
     try {
-      const res = await signInWithPopup(auth, googleAuth);
-      const email = res.user.email; // הוסף שורה זו כדי לקבל את ה-email מתוך התשובה
-      setEmail(email);
-      setUser({ username, email });
-      setSuccess("You have successfully log in");
+      const { user } = await signInWithPopup(auth, googleAuth);
+
+      const { email, displayName } = user;
+
+      // First check if user already exists with the provided email
+      const checkUserResponse = await axios.get(
+        `/api/check-user ? email=${email}`
+      );
+      if (checkUserResponse.data.exists) {
+        // User already registered, just set the user context
+        setUser({ username: displayName, email });
+        setSuccess(`Welcome back, ${displayName}!`);
+        window.location.href = "/recipes";
+        return;
+      }
+
+      // If user doesn't exist, register them with the Google user data
+      await axios.put("/api/register", {
+        username: displayName,
+        email,
+        google_id: user.uid,
+        google_email: email,
+        google_name: displayName,
+      });
+
+      // Set the user context with the registered user data
+      setUser({ username: displayName, email });
+      setSuccess(`${email}, You have successfully registered with Google!`);
       window.location.href = "/recipes";
     } catch (error) {
       console.error(error);
-      setError(error.message);
+      setError("Failed to sign in with Google. Please try again.");
     }
   };
 
@@ -133,7 +155,6 @@ export default function Login() {
                     name="password"
                     type="password"
                     autoComplete="current-password"
-                    required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

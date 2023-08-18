@@ -9,6 +9,7 @@ import { FaBookReader } from "react-icons/fa";
 import { BsCalendarEvent } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { MdOutlineSlowMotionVideo } from "react-icons/md";
+import TimerButton from "./TimerButton";
 const Nav = () => {
   const { user, setUser } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -131,6 +132,10 @@ const Nav = () => {
                 >
                   Add Recipe
                 </button>
+              </Link>
+              {/* // timer button  */}
+              <Link href="/timer" passHref>
+                <TimerButton />
               </Link>
             </div>
           ) : (

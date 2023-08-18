@@ -1,0 +1,17 @@
+import { con } from "../../../lib/db";
+
+export default async function handler(req, res) {
+  const googleId = req.query.id;
+  try {
+    const result = await con
+      .promise()
+      .query("SELECT * FROM users WHERE google_id = ?", [googleId]);
+    if (result[0].length !== 0) {
+      return res.status(200).json({ exists: true });
+    }
+    return res.status(200).json({ exists: false });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+}

@@ -3,8 +3,11 @@ import createtoken from "../../lib/token";
 import { setCookie } from "cookies-next";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-
 import { OAuth2Client } from "google-auth-library";
+
+const GOOGLE_CLIENT_ID =
+  "979802220869-hbc0lm3b8n4kl19hbt4r158knn5bqb9p.apps.googleusercontent.com";
+
 async function getUserFromGoogleToken(token) {
   const client = new OAuth2Client(GOOGLE_CLIENT_ID);
   const ticket = await client.verifyIdToken({
@@ -12,23 +15,22 @@ async function getUserFromGoogleToken(token) {
     audience: GOOGLE_CLIENT_ID,
   });
   const payload = ticket.getPayload();
-  const email = payload.email;
-
-  return { email };
+  return { email: payload.email };
 }
 
 export default async function handler(req, res) {
-  const { email, password } = req.body;
-  async function getUserFromGoogleToken(token) {
-    const client = new OAuth2Client(GOOGLE_CLIENT_ID);
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-    const email = payload.email;
-    // כאן אתה יכול להוסיף עוד פרטים של המשתמש מתוך ה-payload
-    return { email };
+  let email = req.body.email;
+  const { password, googleToken } = req.body;
+
+  // Google Sign-In
+  if (googleToken) {
+    try {
+      const googleUser = await getUserFromGoogleToken(googleToken);
+      email = googleUser.email;
+    } catch (error) {
+      console.error(error);
+      return res.status(400).json({ error: "Invalid Google token" });
+    }
   }
 
   const [rows] = await con
@@ -38,37 +40,25 @@ export default async function handler(req, res) {
   if (rows.length === 0) {
     return res.status(401).json({ error: "Invalid email or password" });
   }
-  //validatetion
-  if (!email || !password) {
-    return res.status(400).json({ error: "Missing fields" });
-  }
 
-  if (password.length < 6) {
-    return res.status(400).json({ error: "Password too short" });
-  }
+  // If this is not a Google Sign-In request, validate the password
+  if (!googleToken) {
+    const user = rows[0];
+    const hashedPassword = user.password;
 
-  //email validation
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ error: "Invalid email" });
-  }
+    try {
+      const passwordMatch = await crypto.timingSafeEqual(
+        Buffer.from(await bcrypt.hash(password, user.salt), "utf8"),
+        Buffer.from(hashedPassword, "utf8")
+      );
 
-  const user = rows[0];
-  const userId = user.id;
-  const hashedPassword = user.password;
-
-  try {
-    const passwordMatch = await crypto.timingSafeEqual(
-      Buffer.from(await bcrypt.hash(password, user.salt), "utf8"),
-      Buffer.from(hashedPassword, "utf8")
-    );
-
-    if (!passwordMatch) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      if (!passwordMatch) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Something went wrong" });
     }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Something went wrong" });
   }
 
   const { token, tokenCreationDate } = createtoken();
@@ -80,7 +70,7 @@ export default async function handler(req, res) {
       [
         token,
         tokenCreationDate.toISOString().substr(0, 19).replace("T", " "),
-        userId,
+        rows[0].id,
       ]
     );
 

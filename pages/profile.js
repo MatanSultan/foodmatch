@@ -10,35 +10,16 @@ export default function Profile() {
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  //validate the form
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
-
-  // name validation
-  const validateName = () => {
-    if (name.length < 3) {
-      setNameError("Name must be at least 3 characters long.");
-    } else {
-      setNameError("");
-    }
-  };
-
-  // email validation
-  const validateEmail = () => {
-    if (!email.includes("@") && !email.includes(".")) {
-      setEmailError("Email must be valid.");
-    } else {
-      setEmailError("");
-    }
-  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        validateEmail();
-        validateName();
         const response = await axios.get("/api/profile");
-        setUser(response.data[0]);
+        setUser(response.data);
+        setName(response.data.name);
+        setEmail(response.data.email);
       } catch (error) {
         console.error(error);
         setError("Error fetching user profile.");
@@ -49,24 +30,36 @@ export default function Profile() {
     fetchUserProfile();
   }, []);
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
+  const validateInputs = () => {
+    let isValid = true;
+    if (name.length < 3) {
+      setNameError("Name must be at least 3 characters long.");
+      isValid = false;
+    } else {
+      setNameError("");
+    }
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailPattern.test(email)) {
+      setEmailError("Email must be valid.");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    return isValid;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!validateInputs()) {
+      return;
+    }
+
     try {
       const response = await axios.put("/api/profile", { name, email });
       setUser(response.data);
       alert("User details updated successfully.");
-      //fetch the user profile again
-      // const responseAgagin = await axios.get("/api/profile");
-      // setUser(responseAgagin.data[0]);
-
       setError("");
     } catch (error) {
       console.error(error);

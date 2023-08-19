@@ -46,8 +46,9 @@ export default function AddVideos() {
 
     try {
       await uploadBytes(storageRef, videoFile);
-      console.log("Uploaded a blob or file!");
+
       setSuccess("Video uploaded successfully");
+      window.location.href = "/videos";
     } catch (error) {
       alert(
         error.message === "not logged in"

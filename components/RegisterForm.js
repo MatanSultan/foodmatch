@@ -97,13 +97,17 @@ const RegisterForm = () => {
         email,
         password,
       });
-      ///
+
       setUser({ username, email });
       setSuccess("You have successfully registered");
       window.location.href = "/recipes";
     } catch (error) {
-      setError(error);
-      console.log(error);
+      setError(
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : "Something went wrong"
+      );
+      console.error(error);
     }
   };
 

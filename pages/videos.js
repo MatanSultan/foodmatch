@@ -10,9 +10,6 @@ const VideosPage = () => {
   const [loading, setLoading] = useState(true); // set initial loading state to true
 
   useEffect(() => {
-    // const abortController = new AbortController();
-    // const signal = abortController.signal;
-
     fetch("/api/getvideo", {})
       .then((response) => response.json())
       .then((data) => {

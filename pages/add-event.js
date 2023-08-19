@@ -8,15 +8,28 @@ function AddEventPage() {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
+  const [error, setError] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (
+      !title.trim() ||
+      !date.trim() ||
+      !time.trim() ||
+      !location.trim() ||
+      !description.trim()
+    ) {
+      setError("All fields are required. Please ensure none are left blank.");
+      return;
+    }
+
     const eventData = { title, date, time, location, description };
     fetch("/api/send-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ eventData }), // Wrap eventData in an object
+      body: JSON.stringify({ eventData }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -27,6 +40,7 @@ function AddEventPage() {
           setTime("");
           setLocation("");
           setDescription("");
+          setEmail(""); // Reset email state after successful submission
         } else {
           alert("Error submitting event. Please try again later.");
         }
@@ -97,6 +111,8 @@ function AddEventPage() {
               onChange={(event) => setDescription(event.target.value)}
             ></textarea>
           </label>
+          {error && <div className="text-red-600 mb-4">{error}</div>}
+
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
             type="submit"

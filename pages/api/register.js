@@ -46,7 +46,16 @@ export default async function handler(req, res) {
     const { token, tokenCreationDate } = createtoken();
 
     const userFields = google_id
-      ? [username, null, null, null, google_id, google_email, google_name, true]
+      ? [
+          username,
+          email,
+          null,
+          null,
+          google_id,
+          google_email,
+          google_name,
+          true,
+        ]
       : [username, email, hashedPassword, salt, null, null, null, false];
 
     const userResult = await con

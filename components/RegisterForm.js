@@ -25,9 +25,8 @@ const RegisterForm = () => {
     try {
       const { user } = await signInWithPopup(auth, googleAuthProvider);
       const { email, displayName, uid } = user;
-
       // Check if the user already exists
-      const checkUser = await axios.get(`/api/checkUser/${uid}`);
+      const checkUser = await axios.get(`/api/checkUser?email=${email}`);
 
       if (checkUser.data.exists) {
         // If the user exists, simply log them in and return

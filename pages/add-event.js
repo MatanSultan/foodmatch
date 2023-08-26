@@ -40,7 +40,6 @@ function AddEventPage() {
           setTime("");
           setLocation("");
           setDescription("");
-          setEmail(""); // Reset email state after successful submission
         } else {
           alert("Error submitting event. Please try again later.");
         }

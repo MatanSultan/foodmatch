@@ -33,7 +33,6 @@ export default function AddVideos() {
     }
     return true;
   };
-
   const handleVideoSubmit = async (event) => {
     event.preventDefault();
 
@@ -46,41 +45,43 @@ export default function AddVideos() {
 
     try {
       await uploadBytes(storageRef, videoFile);
+      const urlDownloadURL = await getDownloadURL(storageRef);
 
+      const videoData = {
+        title,
+        description,
+        videoUrl: urlDownloadURL,
+      };
+
+      const response = await fetch("/api/video", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(videoData),
+      });
+
+      if (!response.ok) {
+        const responseData = await response.json();
+        setError(responseData.error);
+        return;
+      }
+
+      const data = await response.json();
+      setVideos([...videos, { id: data.id, title, description }]);
+      setTitle("");
+      setDescription("");
+      setVideoFile(null);
       setSuccess("Video uploaded successfully");
       window.location.href = "/videos";
     } catch (error) {
-      alert(
+      setError(
         error.message === "not logged in"
           ? "You need to be logged in to upload a video."
           : "An error occurred, try again."
       );
-      console.log(error);
+      console.error(error);
     }
-
-    const urlDownloadURL = await getDownloadURL(storageRef);
-
-    const videoData = {
-      title,
-      description,
-      videoUrl: urlDownloadURL,
-    };
-
-    fetch("/api/video", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(videoData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setVideos([...videos, { id: data.id, title, description }]);
-        setTitle("");
-        setDescription("");
-        setVideoFile(null);
-      })
-      .catch((error) => console.error(error));
   };
 
   return (
